@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -49,34 +48,22 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["changeLogin"]),
     submitForm() {
-      let _this = this;
-      this.$axios.post("/vip/admin/login", _this.ruleForm).then((res, err) => {
-        if (_this.ruleForm.username == "" && _this.ruleForm.password == "") {
-          _this.$message({ message: `用户名和密码不能为空`, type: "error" });
+      this.$axios.post("/vip/admin/login", this.ruleForm).then((res, err) => {
+        if (this.ruleForm.username == "" && this.ruleForm.password == "") {
+          this.$message({ message: `用户名和密码不能为空`, type: "error" });
         } else {
           if (res.data.code == 200) {
-            // console.log(res);
-            _this.userToken = "Bearer " + res.data.data.token;
-            _this.changeLogin({ regkey: _this.userToken });
-            _this.$axios.get('/vip//home/newProduct/list?pageSize=5&pageNum=1').then((res, err) =>{
-               console.log(res);
-            })
-            _this.$axios.get("/vip/admin/info").then((res, err) => {
-              console.log(res);
-              let users = res.data.data
-              if (users) {
-                _this.$store.dispatch("setUser", users);
-                _this.$message({ message: `登录成功`, type: "success" });
-                this.$router.push("/home/sixhund");
-              }else{
-                _this.$store.dispatch("setUser", null);
-                _this.$message.error('当前用户不存在')
-              }
+            this.$message({ message: `登录成功`, type: "success" });
+            let tokens = "Bearer " + res.data.data.token;
+            this.$store.commit("changeLogin", tokens);
+            this.$axios.get("/vip/admin/info").then(res => {
+              this.$store.commit("userStatus", res.data.data);
+              console.log(res.data.data);
             });
+            this.$router.push("/home/sixhund");
           } else if (res.data.code == 404) {
-            _this.$message({ message: `用户名或密码错误`, type: "error" });
+            this.$message({ message: `用户名或密码错误`, type: "error" });
           } else {
             console.log(err);
             this.$message({ message: `未知错误`, type: "error" });

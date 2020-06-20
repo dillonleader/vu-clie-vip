@@ -97,17 +97,21 @@
 </template>
 
 <script>
-import navs from '@/components/nav'
+import navs from "@/components/nav";
 export default {
   created() {
-     this.getLoginInfo()
+    this.getLoginInfo();
   },
   methods: {
-      getLoginInfo(){
-        
-      }
+    getLoginInfo() {
+      this.$axios.get("/vip/admin/info").then(res => {
+        this.$store.commit("userStatus", res.data.data);
+        // localStorage.getItem("regkey", userToken);
+        // console.log(res);
+      });
+    }
   },
-  components:{
+  components: {
     navs
   }
 };
@@ -338,8 +342,8 @@ export default {
           color: #f10180;
           font-size: 12px;
           margin-right: 10px;
-          &:nth-child(n+2)::before{
-            content: '';
+          &:nth-child(n + 2)::before {
+            content: "";
             position: absolute;
             left: -8px;
             top: 2px;

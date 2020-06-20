@@ -4,61 +4,56 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    num: 100,
+    // num: 100,
     isLogin:false,
-    currentuser:{},
-    regkey: localStorage.getItem('regkey') ? localStorage.getItem('regkey') : ''
+    regkey: localStorage.getItem('regkey') ? localStorage.getItem('regkey') : '',
+    userinfo:{},
   },
   getters: {
-    sum: state => {
-      return state.num > 110 ? 0 : state.num
-    },
-    getLogin: state => state.isLogin,
-    getCurrentuser: state => state.currentuser
+    // sum: state => {
+    //   return state.num > 110 ? 0 : state.num
+    // },
+    getCurrentuser: state => state.userinfo,
+    getLogin: state => state.isLogin
   },
   mutations: {
-    add(state, pload) {
-      state.num += pload.n
-      // setTimeout(() => {
-      // }, 1000)
-    },
-    reduce(state, pload) {
-      state.num -= pload.n
-      // setTimeout(() => {
-      // }, 1000)
-    },
-    changeLogin(state, user){
-      state.regkey = user.regkey
-      localStorage.setItem('regkey', user.regkey)
-    },
+    // add(state, pload) {
+    //   state.num += pload.n
+    //   // setTimeout(() => {
+    //   // }, 1000)
+    // },
+    // reduce(state, pload) {
+    //   state.num -= pload.n
+    //   // setTimeout(() => {
+    //   // }, 1000)
+    // },
+    
     userStatus(state, user){
       if(user){
-        state.currentuser = user;
-        state.isLogoin = true
-      }else{
-        state.currentuser = null;
-        state.isLogin = false
+        state.userinfo = user;
+        this.state.isLogin =  !this.state.isLogin
       }
+    },
+    changeLogin(state, user){
+      state.regkey == user
+      localStorage.setItem('regkey', user)
     }
   },
   actions: {
-    onous(content) {
-      setTimeout(() => {
-        content.commit('add', {
-          n: 5
-        })
-      }, 1000);
-    },
-    asays(contents) {
-      setTimeout(() => {
-        contents.commit('reduce', {
-          n: 5
-        })
-      }, 1000);
-    },
-    setUser({commit}, user){
-      commit("userStatus", user)
-    }
+    // onous(content) {
+    //   setTimeout(() => {
+    //     content.commit('add', {
+    //       n: 5
+    //     })
+    //   }, 1000);
+    // },
+    // asays(contents) {
+    //   setTimeout(() => {
+    //     contents.commit('reduce', {
+    //       n: 5
+    //     })
+    //   }, 1000);
+    // }
   }
 })
 export default store
