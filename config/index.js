@@ -11,19 +11,26 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // "/juhe":{
-      //    target:'http://v.juhe.cn',
-      //    changeOrigin:true,
-      //    pathRewrite:{
-      //       '^/juhe':'http://v.juhe.cn'
-      //    },
+      "/juhe":{
+         target:'http://v.juhe.cn',
+         changeOrigin:true,
+         pathRewrite:{
+            '^/juhe':'http://v.juhe.cn'
+         },
          "/vip":{
           target:'http://cps-hk.com:8080/',
           changeOrigin:true,
           pathRewrite:{
              '^/vip':'http://cps-hk.com:8080/'
           }
-
+        },
+          "/mall":{
+           target:'http://192.168.1.122:8085/',
+           changeOrigin:true,
+           pathRewrite:{
+              '^/mall':'http://192.168.1.122:8085/'
+           }
+          }
       }
     },
 

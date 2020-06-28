@@ -12,9 +12,9 @@ import register from '@/components/register'
 import vuexTest from '@/components/vuexTest'
 import details from '@/components/details'
 import home from '@/components/home'
-import nav from '@/components/nav'
 import sixhund from '@/components/sixhund'
 import crayrobb from '@/components/crayrobb'
+import selected from '@/components/selected'
 
 Vue.use(Router)
 const router = new Router({
@@ -85,14 +85,15 @@ const router = new Router({
           path: '/home/crayrobb',
           name: 'crayrobb',
           component: crayrobb
-        }
+        },
+        {
+          path: '/home/selected/:id',
+          name: 'selected',
+          component: selected
+        },
       ]
     },
-    {
-      path: '/nav',
-      name: 'nav',
-      component: nav
-    },
+   
     
   ]
 })

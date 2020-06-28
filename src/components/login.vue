@@ -59,7 +59,7 @@ export default {
             this.$store.commit("changeLogin", tokens);
             this.$axios.get("/vip/admin/info").then(res => {
               this.$store.commit("userStatus", res.data.data);
-              console.log(res.data.data);
+              // console.log(res.data.data);
             });
             this.$router.push("/home/sixhund");
           } else if (res.data.code == 404) {

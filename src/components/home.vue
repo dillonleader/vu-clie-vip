@@ -83,14 +83,10 @@
           </div>
         </div>
         <div class="keywordlist">
-          <a href>爆款限量购</a>
-          <a href>大牌疯抢 3折封顶</a>
-          <a href>夏季热销19元起</a>
-          <a href>断货王排行</a>
+          <a  v-for="(item, index) in keywordlist.slice(0,4)" :key="index" :href="item.url" target="_blank">{{ item.word }}</a>
         </div>
       </div>
     </div>
-    <div class="middle-glo"></div>
     <navs></navs>
     <router-view></router-view>
   </div>
@@ -98,21 +94,30 @@
 
 <script>
 import navs from "@/components/nav";
+import footers from "@/components/footer"
 export default {
+  data() {
+    return {
+      keywordlist:[]
+    }
+  },
   created() {
-    this.getLoginInfo();
+    this.keyword();
   },
   methods: {
-    getLoginInfo() {
-      this.$axios.get("/vip/admin/info").then(res => {
-        this.$store.commit("userStatus", res.data.data);
-        // localStorage.getItem("regkey", userToken);
-        // console.log(res);
+    keyword() {
+      this.$axios.get("keyword").then((res, err) => {
+        if(res.data.code === 200){
+          this.keywordlist  = res.data.data
+          }else{
+            console.log(err);
+          }
       });
     }
   },
   components: {
-    navs
+    navs,
+    footers
   }
 };
 </script>

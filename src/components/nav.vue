@@ -6,28 +6,18 @@
           <img src="https://b.appsimg.com/upload/momin/2018/09/10/150/1536548648745.png" />
           <span>商品分类</span>
           <div class="item-list">
-              <div class="shops">女装/男装/内衣</div>
-              <div class="shops">女鞋/男鞋/箱包</div>
-              <div class="shops">护肤彩妆/个护</div>
-              <div class="shops">运动户外</div>
-              <div class="shops">家电数码</div>
-              <div class="shops">母婴童装</div>
-              <div class="shops">手表配饰</div>
-              <div class="shops">居家用品</div>
-              <div class="shops">唯品生活</div>
-              <div class="shops">唯品国际/唯品奢</div>
-              <div class="shops">医药健康</div>
+              <div class="shops" v-for="(item, index) in navlist" :key="index">{{ item.name }}</div>
           </div>
         </a>
       </li>
       <router-link to='/home/sixhund' tag="li">
-        <a href>618来了</a>
+        <a href>端午特卖</a>
       </router-link>
       <router-link to="/home/crayrobb" tag="li">
         <a href>最后疯抢</a>
       </router-link>
-      <router-link to="" tag="li">
-        <a href>唯品快枪</a>
+      <router-link to="/home/selected/53116029" tag="li">
+        <a href>精选专场</a>
       </router-link>
       <router-link to="" tag="li">
         <a href>女装</a>
@@ -69,8 +59,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      navlist: []
+    }
+  },
   created() {
-      
+      this.getShopClass()
   },
   mounted() {
      $('.item-list').hide()
@@ -82,7 +77,17 @@ export default {
       })
       
   },
-  methods: {}
+  methods: {
+    getShopClass(){
+      this.$axios.get('homenav').then((res, err) => {
+        if(res.status === 200){
+          this.navlist = res.data.data.data.tabs
+        }else{
+          console.log(err);
+        }
+      })
+    }
+  }
 };
 </script>
 

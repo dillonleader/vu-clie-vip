@@ -15,6 +15,8 @@ Vue.use(element)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 
+axios.defaults.baseURL = 'http://localhost/'
+
 axios.interceptors.request.use(config => {
     if (localStorage.getItem('regkey')) {
       config.headers.regkey = localStorage.getItem('regkey')

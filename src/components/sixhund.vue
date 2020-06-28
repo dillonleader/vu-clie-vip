@@ -1,54 +1,61 @@
 <template>
-  <div class="mar-list sixhund">
-    <div class="glo"></div>
-    <div class="piugin"></div>
+<div class="glo">
+  <div class="sixhund">
     <div class="loaded"></div>
     <ul class="women-list">
-      <li class="w-wear">
-        <a href>
+      <li class="w-wear" v-for="(item, index) in shopList" :key="index" @click="shopexplain(item.brandStoreId, item.goodsId)">
+        <a :href="href" target="_blank">
           <div class="pic">
             <img
-              src="https://a.appsimg.com/upload/brand/upcb/2020/05/28/163/ias_159062826053569.jpg!75.webp"
+              :src="item.goodsImageTags.image5.image"
               alt
             />
           </div>
           <div class="brand-logo">
-            <img
-              src="https://a.appsimg.com/upload/brandcool/0/414ea5ec7d6546b5bc7d47fb07b0c112/10000956/primary.png!75.webp"
-              alt
-            />
+            <span>{{item.goodsPriceTag.pricePrefix}}</span>
+            <span>￥</span>
+            <span>{{item.goodsPriceTag.salePrice}}</span>
           </div>
-          <p class="brand-txt">音儿YINER女装-年中特卖节专场</p>
-          <p class="brand-disco">
-            <span>0.8</span>折起
-          </p>
+          <div class="old-price">
+            <span>
+              <i>￥</i>{{item.goodsPriceTag.marketPrice}}
+            </span>
+            <span>{{item.goodsPriceTag.discount}}</span>
+          </div>
+          <div class="explain">{{item.goodsName}}</div>
           <a class="brand-rush">立即抢购</a>
         </a>
       </li>
     </ul>
   </div>
+  <footers></footers>
+  </div>
 </template>
 
 <script>
+import footers from '@/components/footer'
 export default {
+  components:{
+    footers
+  },
   data() {
-    return {};
+    return {
+       shopList: [],
+       href:''
+    };
   },
   created() {
     this.wearlist();
   },
   methods: {
     wearlist() {
-      this.$axios
-        .get("/vip/home/brand/list", {
-          params: {
-            pageSize: 5,
-            pageNum: 1
-          }
-        })
-        .then((res, err) => {
-          // console.log(res);
-        });
+      this.$axios.get("http://localhost/").then((res, err) => {
+        this.shopList = res.data.data.items
+      });
+    },
+    // 详情页
+    shopexplain(brandid, goodid){
+      this.href = `https://detail.vip.com/detail-${brandid}-${goodid}.html`
     }
   }
 };
@@ -58,21 +65,18 @@ export default {
 .glo {
   position: absolute;
   left: 0;
-  z-index: -1;
   width: 100%;
-  height: 1400px;
-  background: #fee2e8;
+  height: auto;
+  background: #DB1B64;
 }
 .sixhund {
-  .piugin {
-    height: 100px;
-    background: url("https://h2.appsimg.com/b.appsimg.com/upload/mst/2020/06/16/9/68ea8ecefd5a4d2a93f714a377f1b06a.jpg")
-      no-repeat center;
-  }
+  width: 1010px;
+  height: auto;
+  margin: 0 auto;
   .loaded {
     height: 100px;
     margin-bottom: 20px;
-    background: url("https://h2.appsimg.com/b.appsimg.com/upload/mst/2020/06/09/166/5d9964c25e1a8406b1ec1d2d489da4e0.png")
+    background: url("https://h2.appsimg.com/b.appsimg.com/upload/mst/2020/06/18/151/ba052ee9de34b87bac19aa4a381e5cac.png")
       no-repeat center;
   }
   .women-list {
@@ -81,8 +85,8 @@ export default {
     .w-wear {
       margin: 0 8px 16px 8px;
       position: relative;
-      width: 240px;
-      height: 400px;
+      width: 234px;
+      height: 460px;
       background: #fff;
       border: 1px solid transparent;
       &:hover {
@@ -94,25 +98,57 @@ export default {
       }
       .pic {
         width: 100%;
-        height: 219px;
+        height: 294px;
         img {
           width: 100%;
           height: 100%;
         }
       }
       .brand-logo {
-        position: absolute;
-        left: 50%;
-        top: 193px;
-        transform: translateX(-50%);
-        width: 104px;
-        height: 54px;
-        background: #fff;
-        border: 1px solid #e6e6e6;
-        img {
-          width: 100%;
-          height: 100%;
+        width: 100%;
+        height: 31px;
+        background: linear-gradient(155deg, #f10180, #f8223a 52%, #fe3b07);
+        span:first-child {
+          padding-left: 15px;
         }
+        span:nth-child(-n + 2) {
+          color: #fff;
+          font-size: 15px;
+          line-height: 30px;
+        }
+        span:nth-child(3) {
+          color: #fff;
+          font-weight: 600;
+          font-size: 22px;
+          line-height: 31px;
+        }
+      }
+      .old-price {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        color: #999;
+        span:first-child {
+          text-decoration: line-through;
+          i {
+            padding: 0;
+            letter-spacing: -4px;
+          }
+        }
+        span:last-child {
+          padding-left: 5px;
+        }
+      }
+      .explain {
+        height: 35px;
+        margin: 0 15px;
+        font-size: 12px;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 16px;
       }
       .brand-txt {
         width: 194px;
