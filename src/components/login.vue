@@ -57,6 +57,7 @@ export default {
           if (res.data.code == 1) {
             this.$message({ message: `登录成功`, type: "success" });
             localStorage.setItem("regkey", res.data.token)
+            localStorage.setItem('username',res.data.username)
             this.$router.push("/home/sixhund");
           } else{
             this.$message({ message: `用户名或密码错误`, type: "error" });

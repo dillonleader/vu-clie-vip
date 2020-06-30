@@ -13,7 +13,7 @@
           </a>
         </li>
         <li class="username">
-          <a href>dillonl</a>
+          <a href>{{username}}</a>
         </li>
         <li class="signout">
           <a @click="signout()">退出</a>
@@ -98,11 +98,13 @@ import footers from "@/components/footer"
 export default {
   data() {
     return {
-      keywordlist:[]
+      keywordlist:[],
+      username:''
     }
   },
   created() {
-    this.keyword();
+    this.keyword(),
+    this.getUsername()
   },
   methods: {
     keyword() {
@@ -117,6 +119,9 @@ export default {
     signout(){
        localStorage.removeItem('regkey')
        this.$router.push('/login')
+    },
+    getUsername(){
+      this.username = localStorage.getItem('username')
     }
   },
   components: {
