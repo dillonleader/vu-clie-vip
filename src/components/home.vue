@@ -16,7 +16,7 @@
           <a href>dillonl</a>
         </li>
         <li class="signout">
-          <a>退出</a>
+          <a @click="signout()">退出</a>
         </li>
         <li>
           <a href>我的订单</a>
@@ -113,6 +113,9 @@ export default {
             console.log(err);
           }
       });
+    },
+    signout(){
+       localStorage.removeItem('regkey')
     }
   },
   components: {

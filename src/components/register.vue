@@ -3,28 +3,22 @@
     <h2>注册</h2>
     <el-form
       :model="ruleForm"
-      :rules="rules"
-      ref="ruleForm"
+      :rules="formVall"
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email"></el-input>
+      <el-form-item label="用户名" prop="user">
+        <el-input v-model="ruleForm.user" placeholder="用户名"></el-input>
       </el-form-item>
-      <el-form-item label="icon" prop="icon">
-        <el-input v-model="ruleForm.icon"></el-input>
+      <el-form-item label="密码" prop="pwd">
+        <el-input type="password" v-model="ruleForm.pwd" 
+          show-password
+          placeholder="密码"></el-input>
       </el-form-item>
-      <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="ruleForm.nickname"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="ruleForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="个性签名" prop="note">
-        <el-input type="textarea" v-model="ruleForm.note"></el-input>
+      <el-form-item label="确认密码" prop="cpwd">
+        <el-input type="password" v-model="ruleForm.cpwd" 
+          show-password
+          placeholder="确认密码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="register" type="primary">注册</el-button>
@@ -37,95 +31,49 @@
 <script>
 export default {
   data() {
+    var confirmpwd = (rule,value,callback)=>{
+      if(value === ''){
+        callback(new Error('密码不能为空'))
+      }else if(value!=this.ruleForm.pwd){
+        callback(new Error('两次密码输入不一致'))
+      }
+      else{
+        callback()
+      }
+    }
     return {
-      ruleForm: {
-        email: "",
-        icon: "",
-        nickname: "",
-        username: "",
-        password: "",
-        note: ""
-      },
-      rules: {
-        email: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" },
-          {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-            trigger: "blur"
-          }
-        ],
-        icon: [
-          { required: true, message: "请输入icon", trigger: "blur" },
-          { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
-        ],
-        nickname: [
-          { required: true, message: "请输入昵称", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
-        ],
-        username: [
+      ruleForm: {user:'',cpwd:'',pwd:''},
+      formVall: {
+        user: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+          {required: true,max: 10,min: 6,message: "用户名长度不正确",trigger: "blur"}
         ],
-        password: [
+        pwd: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          {
-            min: 8,
-            max: 19,
-            message: "长度不符合，建议大于8个字符",
-            trigger: "blur"
-          }
+          {required: true,max: 18,min: 6,message: "密码长度不正确",trigger: "blur"}
         ],
-        note: [
-          { required: true, message: "请填写个性签名", trigger: "blur" },
-          { min: 6, max: 50, message: "长度在 6 到 50 个字符", trigger: "blur" }
-        ]
+        cpwd: [{required: true,validator:confirmpwd,trigger: "blur"}]
       }
     };
   },
   methods: {
     register() {
       this.$axios
-        .post("/vip/admin/register", this.ruleForm)
+        .post("http://www.dillonl.cn:3000/regs", this.ruleForm)
         .then((res, err) => {
-          if (res.data.code == 200) {
-            // console.log(res);
+          if (res.data.code == 1) {
             this.$message({
               showClose: true,
-              message: `恭喜${this.ruleForm.nickname}注册成功，快去登录吧！`,
+              message: `恭喜${this.ruleForm.user}注册成功，快去登录吧！`,
               type: "success"
             });
-          } else if (res.data.code == 201) {
+          } else{
             this.$message({
               showClose: true,
-              message: "注册失败,该邮箱已经注册过了,请换一个邮箱注册!!!",
+              message: "注册失败",
               type: "error"
             });
-          } else if (res.data.code == 401) {
-            this.$message({
-              showClose: true,
-              message: "未经授权",
-              type: "error"
-            });
-          } else if (res.data.code == 403) {
-            this.$message({
-              showClose: true,
-              message: "禁止访问",
-              type: "error"
-            });
-          } else if (res.data.code == 404) {
-            this.$message({
-              showClose: true,
-              message: "资源访问不到",
-              type: "error"
-            });
-          } else {
-            this.$message({
-              showClose: true,
-              message: "未知错误",
-              type: "error"
-            });
-          }
+          } 
         });
     },
     goLogin() {
@@ -146,6 +94,7 @@ export default {
   h2 {
     position: absolute;
     left: 50%;
+    top: 120px;
     font-size: 30px;
     color: #03a9f4;
     transform: translate(-50%, 0);
@@ -153,7 +102,7 @@ export default {
   .el-form {
     position: absolute;
     width: 450px;
-    height: 375px;
+    height: 134px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);

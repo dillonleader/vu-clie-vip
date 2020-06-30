@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     wearlist() {
-      this.$axios.get("http://localhost/").then((res, err) => {
+      this.$axios.get("/").then((res, err) => {
         this.shopList = res.data.data.items
       });
     },

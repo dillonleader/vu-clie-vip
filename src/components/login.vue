@@ -8,11 +8,11 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="ruleForm.username"></el-input>
+      <el-form-item label="用户名" prop="user">
+        <el-input v-model="ruleForm.user"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+      <el-form-item label="密码" prop="pwd">
+        <el-input type="password" v-model="ruleForm.pwd" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="submitForm" type="primary">登录</el-button>
@@ -27,15 +27,15 @@ export default {
   data() {
     return {
       ruleForm: {
-        username: "",
-        password: ""
+        user: "",
+        pwd: ""
       },
       rules: {
-        username: [
+        user: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           { min: 3, max: 10, message: "长度在 3 到 6 个字符", trigger: "blur" }
         ],
-        password: [
+        pwd: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
             min: 8,
@@ -49,24 +49,17 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$axios.post("/vip/admin/login", this.ruleForm).then((res, err) => {
-        if (this.ruleForm.username == "" && this.ruleForm.password == "") {
+      this.$axios.post("http://www.dillonl.cn:3000/login", this.ruleForm).then((res, err) => {
+        console.log(res);
+        if (this.ruleForm.user == "" && this.ruleForm.pwd == "") {
           this.$message({ message: `用户名和密码不能为空`, type: "error" });
         } else {
-          if (res.data.code == 200) {
+          if (res.data.code == 1) {
             this.$message({ message: `登录成功`, type: "success" });
-            let tokens = "Bearer " + res.data.data.token;
-            this.$store.commit("changeLogin", tokens);
-            this.$axios.get("/vip/admin/info").then(res => {
-              this.$store.commit("userStatus", res.data.data);
-              // console.log(res.data.data);
-            });
+            localStorage.setItem("regkey", res.data.token)
             this.$router.push("/home/sixhund");
-          } else if (res.data.code == 404) {
+          } else{
             this.$message({ message: `用户名或密码错误`, type: "error" });
-          } else {
-            console.log(err);
-            this.$message({ message: `未知错误`, type: "error" });
           }
         }
       });

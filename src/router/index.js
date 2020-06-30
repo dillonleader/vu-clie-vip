@@ -1,16 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import one from '@/components/one'
-import two from '@/components/two'
-import three from '@/components/three'
-import four from '@/components/four'
-import comOne from '@/components/comOne'
-import comTwo from '@/components/comTwo'
-import comThree from '@/components/comThree'
 import login from '@/components/login'
 import register from '@/components/register'
-import vuexTest from '@/components/vuexTest'
-import details from '@/components/details'
 import home from '@/components/home'
 import sixhund from '@/components/sixhund'
 import crayrobb from '@/components/crayrobb'
@@ -22,34 +13,8 @@ const router = new Router({
   linkActiveClass: 'activeClass',
   routes: [{
       path: '/',
-      name: 'one',
-      redirect: '/register',
-      component: one
-    }, {
-      path: '/two',
-      name: 'two',
-      component: two,
-      children: [{
-        path: '/two/comTwo',
-        component: comTwo
-      }]
-    }, {
-      path: '/three',
-      name: 'three',
-      component: three,
-      children: [{
-        path: '/three/comOne',
-        component: comOne
-      }]
-    }, {
-      path: '/four',
-      name: 'four',
-      component: four
-    },
-    {
-      path: '/comThree',
-      name: 'comThree',
-      component: comThree
+      name: 'register',
+      component: register
     },
     {
       path: '/login',
@@ -60,16 +25,6 @@ const router = new Router({
       path: '/register',
       name: 'register',
       component: register
-    },
-    {
-      path: '/vuexTest',
-      name: 'vuexTest',
-      component: vuexTest
-    },
-    {
-      path: '/details',
-      name: 'details',
-      component: details
     },
     {
       path: '/home',
@@ -98,13 +53,11 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') return next();
-  const token = localStorage.getItem('regkey')
-  if(token){
-    next()
-  }else{
-    next('/login')
-  }
+router.beforeEach((to,from,next)=>{
+  if(to.path==='/login') return next()
+  if(to.path === '/register') return next()
+  const tokenStr = window.localStorage.getItem('regkey')
+  if (!tokenStr) return next('/login')
+  next()
 })
 export default router
