@@ -116,6 +116,7 @@ export default {
     },
     signout(){
        localStorage.removeItem('regkey')
+       this.$router.push('/login')
     }
   },
   components: {
